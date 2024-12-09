@@ -5,8 +5,8 @@ library(embed)
 library(discrim)
 
 train <- vroom('./training.csv')
-#train <- train %>%
-#  slice_sample(prop = 0.05)
+train <- train %>%
+  slice_sample(prop = 0.05)
 test <- vroom('./test.csv')
 train <- train %>% select(-AUCGUART, -PRIMEUNIT)
 test <- test %>% select(-AUCGUART, -PRIMEUNIT)
@@ -102,12 +102,12 @@ final_wf <- forest_wf %>%
 
 ## Predict
 predictions <- final_wf %>% 
-  predict(new_data = test, type="class") # "class"(yes or no) or "prob"(probability)
+  predict(new_data = test, type="prob") # "class"(yes or no) or "prob"(probability)
 
 kaggle_submission <- predictions %>%
   mutate(RefId = test$RefId) %>%
-  select(RefId, .pred_class) %>%
-  rename(IsBadBuy=.pred_class)
+  select(RefId, .pred_1) %>%
+  rename(IsBadBuy=.pred_1)
 
 
 ## Write out the file

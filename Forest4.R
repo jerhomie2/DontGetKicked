@@ -5,8 +5,6 @@ library(embed)
 library(discrim)
 
 train <- vroom('./training.csv')
-train <- train %>%
-  slice_sample(prop = 0.05)
 test <- vroom('./test.csv')
 train <- train %>% select(-AUCGUART, -PRIMEUNIT)
 test <- test %>% select(-AUCGUART, -PRIMEUNIT)
@@ -60,7 +58,7 @@ prep <- prep(kick_recipe)
 bake <- bake(prep, new_data = train)
 
 my_mod <- rand_forest(mtry = 1, 
-                      min_n = 21, 
+                      min_n = 40, 
                       trees=1000) %>%
   set_engine("ranger") %>%
   set_mode("classification")
